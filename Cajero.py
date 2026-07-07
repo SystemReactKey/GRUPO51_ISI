@@ -89,7 +89,11 @@ def validar_credenciales():
 # ============================================================
 
 def consultar_saldo(usuario):
-    pass
+    """
+    Muestra el saldo actual disponible de la cuenta del usuario.
+    """
+    saldo_actual = usuarios[usuario]["saldo"]
+    print(f"\nSu saldo disponible es: ${saldo_actual}")
 
 
 # ============================================================
@@ -106,7 +110,22 @@ def realizar_extraccion(usuario):
 # ============================================================
 
 def realizar_deposito(usuario):
-    pass
+    """
+    Permite ingresar dinero a la cuenta.
+    Valida que el monto sea un número positivo.
+    """
+    try:
+        monto = float(input("\nIngrese el monto a depositar: $"))
+
+        if monto <= 0:
+            print("\nError: El monto a depositar debe ser mayor a cero.")
+            return
+
+        usuarios[usuario]["saldo"] += monto
+        print(f"\nDepósito exitoso. Nuevo saldo: ${usuarios[usuario]['saldo']}")
+
+    except ValueError:
+        print("\nError: Debe ingresar un valor numérico válido.")
 
 
 # ============================================================
