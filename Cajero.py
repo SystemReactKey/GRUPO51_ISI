@@ -1,18 +1,4 @@
 # ============================================================
-# TRABAJO FINAL INTEGRADOR - ALGORITMOS Y ESTRUCTURAS DE DATOS
-# Simulador de Cajero Automático
-#
-# Integrantes:
-# - Dulio Jhoser Cardozo
-# - Enzo Mariano Gronda
-# - Ramiro Agustín Orue
-#
-# Comisión: ISI
-# Año: 2026
-# ============================================================
-
-
-# ============================================================
 # BLOQUE 1 - AUTENTICACIÓN
 # Responsable: Enzo Mariano Gronda
 # ============================================================
@@ -35,7 +21,6 @@ usuarios = {
         "bloqueado": False
     }
 }
-
 
 def validar_credenciales():
     """
@@ -82,7 +67,6 @@ def validar_credenciales():
 
     return None
 
-
 # ============================================================
 # BLOQUE 2 - CONSULTA DE SALDO
 # Responsable: Dulio Jhoser Cardozo
@@ -95,7 +79,6 @@ def consultar_saldo(usuario):
     saldo_actual = usuarios[usuario]["saldo"]
     print(f"\nSu saldo disponible es: ${saldo_actual}")
 
-
 # ============================================================
 # BLOQUE 3 - EXTRACCIÓN
 # Responsable: Ramiro Agustín Orue
@@ -104,19 +87,24 @@ def consultar_saldo(usuario):
 LIMITE_DIARIO = 50000
 
 def realizar_extraccion(usuario):
+    """
+    Permite retirar dinero de la cuenta.
+    Valida saldo suficiente y que no supere el límite permitido.
+    """
+
     try:
         monto = float(input("/ingrese el monto a extraer: $"))
         if monto <= 0:
             print("\nError: El monto a extraer debe ser mayor a cero.")
-        return
+            return
 
         if monto > LIMITE_DIARIO:
             print(f"\nError: El monto supera el límite de extracción diaria (${LIMITE_DIARIO}).")
-        return
+            return
 
         if monto > usuarios[usuario]["saldo"]:
             print("\nError: Saldo insuficiente para realizar la operación.")
-        return
+            return
 
         # Resta del acumulador
         usuarios[usuario]["saldo"] -= monto
@@ -148,14 +136,44 @@ def realizar_deposito(usuario):
     except ValueError:
         print("\nError: Debe ingresar un valor numérico válido.")
 
-
 # ============================================================
 # BLOQUE 5 - TRANSFERENCIAS
 # ============================================================
 
 def realizar_transferencia(usuario):
-    pass
+    """
+    Simula una transferencia a otro usuario del sistema mediante validación.
+    """
+    destino = input("\nIngrese el nombre de usuario del destinatario: ").lower().strip()
 
+    if destino == usuario:
+        print("\nError: No puede transferirse dinero a sí mismo.")
+        return
+
+    if destino not in usuarios:
+        print("\nError: El usuario destinatario no existe.")
+        return
+
+    try:
+        monto = float(input(f"Ingrese el monto a transferir a {destino.capitalize()}: $"))
+
+        if monto <= 0:
+            print("\nError: El monto debe ser mayor a cero.")
+            return
+
+        if monto > usuarios[usuario]["saldo"]:
+            print("\nError: Saldo insuficiente para transferir.")
+            return
+
+        # Operación cruzada de acumuladores
+        usuarios[usuario]["saldo"] -= monto
+        usuarios[destino]["saldo"] += monto
+        
+        print("\n¡Transferencia realizada con éxito!")
+        print(f"Su saldo actual es: ${usuarios[usuario]['saldo']}")
+
+    except ValueError:
+        print("\nError: Debe ingresar un valor numérico válido.")
 
 # ============================================================
 # BLOQUE 6 - MENÚ PRINCIPAL
@@ -171,7 +189,6 @@ def mostrar_menu():
     print("4 - Transferir dinero")
     print("5 - Cerrar sesión")
     print("==============================")
-
 
 # ============================================================
 # FUNCIÓN PRINCIPAL
@@ -208,7 +225,6 @@ def main():
 
         else:
             print("\nOpción inválida.")
-
 
 # ============================================================
 # INICIO DEL PROGRAMA
