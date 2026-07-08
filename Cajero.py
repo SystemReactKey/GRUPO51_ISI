@@ -1,6 +1,5 @@
 # ============================================================
 # BLOQUE 1 - AUTENTICACIÓN
-# Responsable: Enzo Mariano Gronda
 # ============================================================
 
 # Diccionario simulado de usuarios
@@ -8,19 +7,33 @@ usuarios = {
     "enzo": {
         "pin": 1234,
         "saldo": 250000,
-        "bloqueado": False
+        "bloqueado": False,
+        "extraido_hoy": 0
     },
     "dulio": {
         "pin": 4321,
         "saldo": 180000,
-        "bloqueado": False
+        "bloqueado": False,
+        "extraido_hoy": 0
     },
     "ramiro": {
         "pin": 1111,
         "saldo": 95000,
-        "bloqueado": False
+        "bloqueado": False,
+        "extraido_hoy": 0
     }
 }
+
+def formatear_monto(valor):
+    """
+    Da formato de moneda a un valor numérico, usando punto como
+    separador de miles y coma para decimales.
+    Si el valor es entero no muestra decimales.
+    """
+    if valor == int(valor):
+        return f"{int(valor):,}".replace(",", ".")
+    texto = f"{valor:,.2f}"
+    return texto.replace(",", "X").replace(".", ",").replace("X", ".")
 
 def validar_credenciales():
     """
@@ -69,7 +82,6 @@ def validar_credenciales():
 
 # ============================================================
 # BLOQUE 2 - CONSULTA DE SALDO
-# Responsable: Dulio Jhoser Cardozo
 # ============================================================
 
 def consultar_saldo(usuario):
@@ -77,11 +89,10 @@ def consultar_saldo(usuario):
     Muestra el saldo actual disponible de la cuenta del usuario.
     """
     saldo_actual = usuarios[usuario]["saldo"]
-    print(f"\nSu saldo disponible es: ${saldo_actual}")
+    print(f"\nSu saldo disponible es: ${formatear_monto(saldo_actual)}")
 
 # ============================================================
 # BLOQUE 3 - EXTRACCIÓN
-# Responsable: Ramiro Agustín Orue
 # ============================================================
 
 LIMITE_DIARIO = 50000
@@ -89,27 +100,33 @@ LIMITE_DIARIO = 50000
 def realizar_extraccion(usuario):
     """
     Permite retirar dinero de la cuenta.
-    Valida saldo suficiente y que no supere el límite permitido.
+    Valida saldo suficiente y que no se supere el límite diario acumulado.
     """
 
     try:
-        monto = float(input("/ingrese el monto a extraer: $"))
+        monto = float(input("\nIngrese el monto a extraer: $"))
         if monto <= 0:
             print("\nError: El monto a extraer debe ser mayor a cero.")
             return
 
-        if monto > LIMITE_DIARIO:
-            print(f"\nError: El monto supera el límite de extracción diaria (${LIMITE_DIARIO}).")
+        disponible_diario = LIMITE_DIARIO - usuarios[usuario]["extraido_hoy"]
+
+        if monto > disponible_diario:
+            print(f"\nError: El monto supera el límite de extracción diaria.")
+            print(f"Límite diario: ${formatear_monto(LIMITE_DIARIO)}")
+            print(f"Ya extraído hoy: ${formatear_monto(usuarios[usuario]['extraido_hoy'])}")
+            print(f"Disponible para extraer hoy: ${formatear_monto(disponible_diario)}")
             return
 
         if monto > usuarios[usuario]["saldo"]:
             print("\nError: Saldo insuficiente para realizar la operación.")
             return
 
-        # Resta del acumulador
+        # Resta del acumulador de saldo y suma al acumulador diario extraído
         usuarios[usuario]["saldo"] -= monto
+        usuarios[usuario]["extraido_hoy"] += monto
         print(f"\nExtracción realizada. Retire su dinero.")
-        print(f"Saldo restante: ${usuarios[usuario]['saldo']}")
+        print(f"Saldo restante: ${formatear_monto(usuarios[usuario]['saldo'])}")
 
     except ValueError:
         print("\nError: Debe ingresar un valor numérico válido.")
@@ -131,7 +148,7 @@ def realizar_deposito(usuario):
             return
 
         usuarios[usuario]["saldo"] += monto
-        print(f"\nDepósito exitoso. Nuevo saldo: ${usuarios[usuario]['saldo']}")
+        print(f"\nDepósito exitoso. Nuevo saldo: ${formatear_monto(usuarios[usuario]['saldo'])}")
 
     except ValueError:
         print("\nError: Debe ingresar un valor numérico válido.")
@@ -170,7 +187,7 @@ def realizar_transferencia(usuario):
         usuarios[destino]["saldo"] += monto
         
         print("\n¡Transferencia realizada con éxito!")
-        print(f"Su saldo actual es: ${usuarios[usuario]['saldo']}")
+        print(f"Su saldo actual es: ${formatear_monto(usuarios[usuario]['saldo'])}")
 
     except ValueError:
         print("\nError: Debe ingresar un valor numérico válido.")
