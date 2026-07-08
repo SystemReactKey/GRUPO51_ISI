@@ -1,17 +1,4 @@
 # ============================================================
-# TRABAJO FINAL INTEGRADOR - ALGORITMOS Y ESTRUCTURAS DE DATOS
-# Simulador de Cajero Automático
-#
-# Integrantes:
-# - Dulio Jhoser Cardozo
-# - Enzo Mariano Gronda
-# - Ramiro Agustín Orue
-#
-# Comisión: ISI
-# Año: 2026
-# ============================================================
-
-# ============================================================
 # BLOQUE 1 - AUTENTICACIÓN
 # Responsable: Enzo Mariano Gronda
 # ============================================================
@@ -100,19 +87,24 @@ def consultar_saldo(usuario):
 LIMITE_DIARIO = 50000
 
 def realizar_extraccion(usuario):
+    """
+    Permite retirar dinero de la cuenta.
+    Valida saldo suficiente y que no supere el límite permitido.
+    """
+
     try:
         monto = float(input("/ingrese el monto a extraer: $"))
         if monto <= 0:
             print("\nError: El monto a extraer debe ser mayor a cero.")
-        return
+            return
 
         if monto > LIMITE_DIARIO:
             print(f"\nError: El monto supera el límite de extracción diaria (${LIMITE_DIARIO}).")
-        return
+            return
 
         if monto > usuarios[usuario]["saldo"]:
             print("\nError: Saldo insuficiente para realizar la operación.")
-        return
+            return
 
         # Resta del acumulador
         usuarios[usuario]["saldo"] -= monto
@@ -149,6 +141,9 @@ def realizar_deposito(usuario):
 # ============================================================
 
 def realizar_transferencia(usuario):
+    """
+    Simula una transferencia a otro usuario del sistema mediante validación.
+    """
     destino = input("\nIngrese el nombre de usuario del destinatario: ").lower().strip()
 
     if destino == usuario:
