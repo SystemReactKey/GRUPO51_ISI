@@ -6,7 +6,7 @@ INTEGRANTES:
  - Ramiro Agustín Orue
 COMISION: ISI
 AÑO: 2026
-URL VIDEO: 
+URL VIDEO: https://drive.google.com/file/d/1SIyq1l2D0I3WNSFZ_bRO1c4cyO2k0RvE/view?usp=sharing
 
 DESCRIPCION DEL SISTEMA:
     Simulador de operaciones basicas de un cajero automatico, valida el acceso por nombre de usuario y contraseña, consulta saldo disponible, ademas implementa acciones como extraccion, deposito y transeferencias.
