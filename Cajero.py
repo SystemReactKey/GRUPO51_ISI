@@ -11,7 +11,6 @@
 # Año: 2026
 # ============================================================
 
-
 # ============================================================
 # BLOQUE 1 - AUTENTICACIÓN
 # Responsable: Enzo Mariano Gronda
@@ -35,7 +34,6 @@ usuarios = {
         "bloqueado": False
     }
 }
-
 
 def validar_credenciales():
     """
@@ -82,7 +80,6 @@ def validar_credenciales():
 
     return None
 
-
 # ============================================================
 # BLOQUE 2 - CONSULTA DE SALDO
 # Responsable: Dulio Jhoser Cardozo
@@ -94,7 +91,6 @@ def consultar_saldo(usuario):
     """
     saldo_actual = usuarios[usuario]["saldo"]
     print(f"\nSu saldo disponible es: ${saldo_actual}")
-
 
 # ============================================================
 # BLOQUE 3 - EXTRACCIÓN
@@ -148,14 +144,41 @@ def realizar_deposito(usuario):
     except ValueError:
         print("\nError: Debe ingresar un valor numérico válido.")
 
-
 # ============================================================
 # BLOQUE 5 - TRANSFERENCIAS
 # ============================================================
 
 def realizar_transferencia(usuario):
-    pass
+    destino = input("\nIngrese el nombre de usuario del destinatario: ").lower().strip()
 
+    if destino == usuario:
+        print("\nError: No puede transferirse dinero a sí mismo.")
+        return
+
+    if destino not in usuarios:
+        print("\nError: El usuario destinatario no existe.")
+        return
+
+    try:
+        monto = float(input(f"Ingrese el monto a transferir a {destino.capitalize()}: $"))
+
+        if monto <= 0:
+            print("\nError: El monto debe ser mayor a cero.")
+            return
+
+        if monto > usuarios[usuario]["saldo"]:
+            print("\nError: Saldo insuficiente para transferir.")
+            return
+
+        # Operación cruzada de acumuladores
+        usuarios[usuario]["saldo"] -= monto
+        usuarios[destino]["saldo"] += monto
+        
+        print("\n¡Transferencia realizada con éxito!")
+        print(f"Su saldo actual es: ${usuarios[usuario]['saldo']}")
+
+    except ValueError:
+        print("\nError: Debe ingresar un valor numérico válido.")
 
 # ============================================================
 # BLOQUE 6 - MENÚ PRINCIPAL
@@ -171,7 +194,6 @@ def mostrar_menu():
     print("4 - Transferir dinero")
     print("5 - Cerrar sesión")
     print("==============================")
-
 
 # ============================================================
 # FUNCIÓN PRINCIPAL
@@ -208,7 +230,6 @@ def main():
 
         else:
             print("\nOpción inválida.")
-
 
 # ============================================================
 # INICIO DEL PROGRAMA
