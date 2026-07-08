@@ -5,7 +5,7 @@
 # Integrantes:
 # - Dulio Jhoser Cardozo
 # - Enzo Mariano Gronda
-# - Ramiro Agustín Oru
+# - Ramiro Agustín Orue
 #
 # Comisión: ISI
 # Año: 2026
@@ -98,12 +98,33 @@ def consultar_saldo(usuario):
 
 # ============================================================
 # BLOQUE 3 - EXTRACCIÓN
-# Responsable: Ramiro Agustín Oru
+# Responsable: Ramiro Agustín Orue
 # ============================================================
 
-def realizar_extraccion(usuario):
-    pass
+LIMITE_DIARIO = 50000
 
+def realizar_extraccion(usuario):
+    try:
+        monto = float(input("/ingrese el monto a extraer: $"))
+        if monto <= 0:
+            print("\nError: El monto a extraer debe ser mayor a cero.")
+        return
+
+        if monto > LIMITE_DIARIO:
+            print(f"\nError: El monto supera el límite de extracción diaria (${LIMITE_DIARIO}).")
+        return
+
+        if monto > usuarios[usuario]["saldo"]:
+            print("\nError: Saldo insuficiente para realizar la operación.")
+        return
+
+        # Resta del acumulador
+        usuarios[usuario]["saldo"] -= monto
+        print(f"\nExtracción realizada. Retire su dinero.")
+        print(f"Saldo restante: ${usuarios[usuario]['saldo']}")
+
+    except ValueError:
+        print("\nError: Debe ingresar un valor numérico válido.")
 
 # ============================================================
 # BLOQUE 4 - DEPÓSITOS
